@@ -41,13 +41,13 @@ public class spawnCube : UdonSharpBehaviour
 
 
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 100; i++)
         {
             Debug.Log("1");
 
 
-            //if (created[i] == null)
-            //{
+            if (created[i] == null)
+            {
             var newObject = VRCInstantiate(spawnItem);
             //newObject.
             Debug.Log("2");
@@ -60,7 +60,7 @@ public class spawnCube : UdonSharpBehaviour
             created[i] = newObject;
             Debug.Log("5");
 
-            //}
+            }
 
         };
         Debug.Log("6");
@@ -68,9 +68,11 @@ public class spawnCube : UdonSharpBehaviour
 
 
 
-
+        Debug.Log("6");
         var newAudioObject = VRCInstantiate(audioObject);
-        created[251] = newAudioObject;
+        Debug.Log("7");
+        created[250] = newAudioObject;
+        Debug.Log("8");
 
         newAudioObject.transform.position = this.transform.position + Random.onUnitSphere * sphereRadius;
         var sound = newAudioObject.GetComponent<AudioSource>();
