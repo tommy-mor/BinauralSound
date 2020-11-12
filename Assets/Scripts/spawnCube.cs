@@ -43,36 +43,25 @@ public class spawnCube : UdonSharpBehaviour
 
         for (int i = 0; i < 100; i++)
         {
-            Debug.Log("1");
-
 
             if (created[i] == null)
             {
-            var newObject = VRCInstantiate(spawnItem);
-            //newObject.
-            Debug.Log("2");
+                var newObject = VRCInstantiate(spawnItem);
+                //newObject.
+                Vector3 onPlanet = Random.onUnitSphere * sphereRadius;
+                if (onPlanet.y < 0) onPlanet.y = onPlanet.y * -1; // flip lower hemisphere
+               
 
-            Vector3 onPlanet = Random.onUnitSphere * sphereRadius;
-            Debug.Log("3");
-
-            newObject.transform.position = this.transform.position + onPlanet;
-            Debug.Log("4");
-            created[i] = newObject;
-            Debug.Log("5");
-
+                newObject.transform.position = this.transform.position + onPlanet;
+                created[i] = newObject;
             }
 
         };
-        Debug.Log("6");
 
 
 
-
-        Debug.Log("6");
         var newAudioObject = VRCInstantiate(audioObject);
-        Debug.Log("7");
         created[250] = newAudioObject;
-        Debug.Log("8");
 
         newAudioObject.transform.position = this.transform.position + Random.onUnitSphere * sphereRadius;
         var sound = newAudioObject.GetComponent<AudioSource>();
@@ -89,7 +78,12 @@ public class spawnCube : UdonSharpBehaviour
             for (int i = 0; i < 251; i++)
             {
                 Debug.Log("deleting");
-                //Destroy(created[i]);
+                if(created[i] != null)
+                {
+                    Destroy(created[i]);
+
+                }
+
 
             }
         }

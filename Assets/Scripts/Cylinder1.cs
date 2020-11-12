@@ -31,22 +31,23 @@ public class Cylinder1 : UdonSharpBehaviour
 
     }
 
-    //void OnCollisionEnter(Collision col)
-    //{
+    void OnCollisionEnter(Collision col)
+    {
 
-    //    // This function is primarily to avoid overlaying pins by destroying this pin if it collides with another pin.
-    //    // PinSpawner.cs makes sure pins keep spawning like this untill there's a total of e.g. 400 pins in the scene.
+        // This function is primarily to avoid overlaying pins by destroying this pin if it collides with another pin.
+        // PinSpawner.cs makes sure pins keep spawning like this untill there's a total of e.g. 400 pins in the scene.
 
-    //    //if (col.gameObject.tag == "Pin")
-    //    //{ //if colliding object is of type 'Pin'
-    //    Debug.Log("found collision");
-    //   //Destroy(gameObject); //destroy this game object.
-    //                         //Debug.Log("Object destroyed!");
-    //                         // }
-    //                         //  else if (col.gameObject.tag == "PipPopPin")
-    //                         //  { // makes sure PipPopPin destroys this object. could be an || statement, but meh. I like spaghetti.
-    //                         //      Destroy(this.gameObject);
-    //                         //     Debug.Log("Pip-Pop Pin destroyed other pin!");
-    //                         //  }
-    //}
+        //    //if (col.gameObject.tag == "Pin")
+        //    //{ //if colliding object is of type 'Pin'
+        //    Debug.Log("found collision");
+        //   //Destroy(gameObject); //destroy this game object.
+        //                         //Debug.Log("Object destroyed!");
+        //                         // }
+        //                         //  else if (col.gameObject.tag == "PipPopPin")
+        //                         //  { // makes sure PipPopPin destroys this object. could be an || statement, but meh. I like spaghetti.
+        //                         //      Destroy(this.gameObject);
+        //                         //     Debug.Log("Pip-Pop Pin destroyed other pin!");
+        //                         //  }
+        Debug.Log("collided");
+    }
 }
