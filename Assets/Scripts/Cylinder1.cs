@@ -43,18 +43,18 @@ public class Cylinder1 : UdonSharpBehaviour
         this.timer += Time.deltaTime;
 
         // commented code here makes the special one blue
-        // if (this.sound != null)
-        // {
-        //     if(this.timer > this.changeEvery)
-        //     {
-        //         gameObject.GetComponent<Renderer>().material = yellow;
-        //
-        //        this.timer = 0.0f;
-        //        this.sound.Play();
-        //   }
-        //    return;
-        //
-        // }
+         if (this.sound != null)
+         {
+             if(this.timer > this.changeEvery)
+             {
+                 gameObject.GetComponent<Renderer>().material = yellow;
+        
+                this.timer = 0.0f;
+                this.sound.Play();
+           }
+            return;
+        
+         }
         if (this.state == 0) // we are red right now
         {
             if (this.timer > this.changeEvery)
@@ -113,8 +113,9 @@ public class Cylinder1 : UdonSharpBehaviour
 
     }
 
-    public void OnCollisionEnter(Collision col)
+    void OnCollisionStay(Collision col)
     {
+
 
         // This function is primarily to avoid overlaying pins by destroying this pin if it collides with another pin.
         // PinSpawner.cs makes sure pins keep spawning like this untill there's a total of e.g. 400 pins in the scene.
@@ -130,7 +131,19 @@ public class Cylinder1 : UdonSharpBehaviour
         //                         //      Destroy(this.gameObject);
         //                         //     Debug.Log("Pip-Pop Pin destroyed other pin!");
         //                         //  }
-        Debug.Log("collided");
+
+        if (this.sound != null)
+        {
+            // we are special
+
+            Debug.Log("collided with special, destroying other");
+            Destroy(col.gameObject);
+        } else
+        {
+            Debug.Log("collided with other, destroying me");
+
+            Destroy(gameObject);
+        }
     }
 
 }

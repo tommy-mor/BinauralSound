@@ -23,11 +23,11 @@ public class spawnCube : UdonSharpBehaviour
     // make the participant/runner separate
     // think of way to make them press button
     // x height limit of 75% radius
-    // -- move behavior of sound one into normal class
-    //  handle collisions?
+    // x move behavior of sound one into normal class
+    // x handle collisions?
 
-    // solution to sync problem: use synced variable random seed, so it generates all of the same things. send out network events. (good) will this work?
-    // OR hvae a set of nodes, just move them around using shared variables. (bad)
+    // x solution to sync problem: use synced variable random seed, so it generates all of the same things. send out network events. (good) will this work?
+    // x OR hvae a set of nodes, just move them around using shared variables. (bad)
     //
 
     public void StartTrial() {
@@ -58,6 +58,7 @@ public class spawnCube : UdonSharpBehaviour
                 newObject.transform.position = this.transform.position + onPlanet;
                 created[count] = newObject;
 
+                var  tf =  newObject.GetComponent<CapsuleCollider>();
 
 
 
@@ -88,16 +89,14 @@ public class spawnCube : UdonSharpBehaviour
     {
         if (this.sentEvent)
         {
-            for (int i = 0; i < 251; i++)
+            if (this.created != null)
             {
                 Debug.Log("deleting");
-                if(created[i] != null)
+                foreach (var item in this.created)
                 {
-                    Destroy(created[i]);
-
+                    Debug.Log(item);
+                    Destroy(item);
                 }
-
-
             }
         }
     }
