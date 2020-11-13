@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
-
+using VRC.Udon.Common.Interfaces;
 
 public class spawnCube : UdonSharpBehaviour
 {
@@ -14,24 +14,25 @@ public class spawnCube : UdonSharpBehaviour
 
     float sphereRadius = 10;
 
-    private GameObject[] created = new GameObject[251];
-    // current goal: make obilque cylinders rotated at the same angles
+    private GameObject[] created = new GameObject[500];
     private bool sentEvent = false;
-    // TODO make next stage a new level (look up tutorial on how to make levels in vrchat, otherwise make it area that opens up/gets enabled
 
+    // todo
     // do a L/R easy test to start
+    //x make them change colors/change orientations
+    // make the participant/runner separate
+    // think of way to make them press button
+    // x height limit of 75% radius
+    // -- move behavior of sound one into normal class
+    //  handle collisions?
 
-    private bool hasNull(GameObject[] array)
-    {
-        for (int i = 0; i < array.Length; i++)
-        {
+    // solution to sync problem: use synced variable random seed, so it generates all of the same things. send out network events. (good) will this work?
+    // OR hvae a set of nodes, just move them around using shared variables. (bad)
+    //
 
-        }
-        return false;
-    }
-
-    public override void Interact()
-    {
+    public void StartTrial() {
+        Debug.Log("received event");
+        Random.InitState(1234);
         this.sentEvent = true;
         Debug.Log("testing");
 
@@ -41,34 +42,46 @@ public class spawnCube : UdonSharpBehaviour
 
 
 
-        for (int i = 0; i < 100; i++)
+        int count = 0;
+        int goalCount = 100;
+        while (count < goalCount)
         {
 
-            if (created[i] == null)
+
+            //newObject.
+            Vector3 onPlanet = Random.onUnitSphere * sphereRadius;
+            if (onPlanet.y < 0) onPlanet.y = onPlanet.y * -1; // flip lower hemisphere
+
+            if (onPlanet.y < sphereRadius * .75)
             {
                 var newObject = VRCInstantiate(spawnItem);
-                //newObject.
-                Vector3 onPlanet = Random.onUnitSphere * sphereRadius;
-                if (onPlanet.y < 0) onPlanet.y = onPlanet.y * -1; // flip lower hemisphere
-               
-
                 newObject.transform.position = this.transform.position + onPlanet;
-                created[i] = newObject;
+                created[count] = newObject;
+
+
+
+
+
+                if (count == 0)
+                {
+                    newObject.GetComponent<Cylinder1>().SetSpecial();
+                    // make this one the special one
+                } else
+                {
+                    newObject.GetComponent<Cylinder1>().SetUnSpecial();
+
+                }
+                count++;
             }
-
-        };
-
-
-
-        var newAudioObject = VRCInstantiate(audioObject);
-        created[250] = newAudioObject;
-
-        newAudioObject.transform.position = this.transform.position + Random.onUnitSphere * sphereRadius;
-        var sound = newAudioObject.GetComponent<AudioSource>();
-        sound.loop = true;
-        sound.Play();
+        }
 
         gameObject.SetActive(false);
+    }
+    
+
+    public override void Interact()
+    {
+        SendCustomNetworkEvent(NetworkEventTarget.All, "StartTrial");
     }
 
     public void DeleteSquares()
