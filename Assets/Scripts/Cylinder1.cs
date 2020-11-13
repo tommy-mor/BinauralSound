@@ -17,10 +17,17 @@ public class Cylinder1 : UdonSharpBehaviour
     private AudioSource sound;
     private int localangle;
 
+    // for the filling algorithm
+    private Transform ogTransform;
+    //private Quaternion ogRotation;
+
+    // parameters
     public float changeEvery;
     public Material redMat;
     public Material greenMat;
     public Material yellow;
+
+
 
 
 
@@ -34,7 +41,7 @@ public class Cylinder1 : UdonSharpBehaviour
     void Start()
     {
         this.timer = 0.0f;
-        this.state = Random.Range(0, 2); 
+        this.state = Random.Range(0, 2);
 
     }
 
@@ -43,18 +50,18 @@ public class Cylinder1 : UdonSharpBehaviour
         this.timer += Time.deltaTime;
 
         // commented code here makes the special one blue
-         if (this.sound != null)
-         {
-             if(this.timer > this.changeEvery)
-             {
-                 gameObject.GetComponent<Renderer>().material = yellow;
-        
+        if (this.sound != null)
+        {
+            if (this.timer > this.changeEvery)
+            {
+                gameObject.GetComponent<Renderer>().material = yellow;
+
                 this.timer = 0.0f;
                 this.sound.Play();
-           }
+            }
             return;
-        
-         }
+
+        }
         if (this.state == 0) // we are red right now
         {
             if (this.timer > this.changeEvery)
@@ -62,12 +69,13 @@ public class Cylinder1 : UdonSharpBehaviour
                 this.state = 1; // switch to green
                 this.timer = 0.0f;
                 gameObject.GetComponent<Renderer>().material = greenMat;
-                if(this.sound != null)
+                if (this.sound != null)
                 {
                     this.sound.Play();
                 }
             }
-        } else if (this.state == 1) // we are green right now
+        }
+        else if (this.state == 1) // we are green right now
         {
             if (this.timer > this.changeEvery)
             {
@@ -75,7 +83,7 @@ public class Cylinder1 : UdonSharpBehaviour
                 this.timer = 0.0f;
                 gameObject.GetComponent<Renderer>().material = redMat;
 
-                if(this.sound != null) 
+                if (this.sound != null)
                 {
                     this.sound.Play();
                 }
@@ -85,8 +93,10 @@ public class Cylinder1 : UdonSharpBehaviour
 
     }
 
-    public void SetSpecial()
+    private int index; // the index we are in the parent array
+    public void SetSpecial(int idx)
     {
+        this.index = idx;
         Debug.Log("i am special");
         // we are the special one.
 
@@ -102,8 +112,9 @@ public class Cylinder1 : UdonSharpBehaviour
         this.sound = gameObject.GetComponent<AudioSource>();
     }
 
-    public void SetUnSpecial()
+    public void SetUnSpecial(int idx)
     {
+        this.index = idx;
         random = Random.Range(0, 12); // picks a random angle for this specific clone
         this.localangle = angle[random];  // picks a random angle for this specific clone
 
@@ -131,6 +142,16 @@ public class Cylinder1 : UdonSharpBehaviour
         //                         //      Destroy(this.gameObject);
         //                         //     Debug.Log("Pip-Pop Pin destroyed other pin!");
         //                         //  }
+        //newObject.
+        //    Vector3 onPlanet = Random.onUnitSphere * sphereRadius;
+        //    if (onPlanet.y < 0) onPlanet.y = onPlanet.y * -1; // flip lower hemisphere
+        //
+        //    if (onPlanet.y < sphereRadius * .75)
+        //    {
+        //        var newObject = VRCInstantiate(spawnItem);
+        //        newObject.transform.position = this.transform.position + onPlanet;
+        //        created[count] = newObject;
+        //
 
         if (this.sound != null)
         {
@@ -138,10 +159,11 @@ public class Cylinder1 : UdonSharpBehaviour
 
             Debug.Log("collided with special, destroying other");
             Destroy(col.gameObject);
-        } else
+        }
+        else
         {
             Debug.Log("collided with other, destroying me");
-
+            this.homeCube.GetComponent<spawnCube>().deleteSquare(this.index);
             Destroy(gameObject);
         }
     }

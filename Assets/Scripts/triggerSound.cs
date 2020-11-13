@@ -11,11 +11,11 @@ public class triggerSound : UdonSharpBehaviour
 
     public override void Interact()
     {
-      //  var sound = gameObject.GetComponent<AudioSource>();
-      //  Debug.Log("playting" + sound.isPlaying);
+        //  var sound = gameObject.GetComponent<AudioSource>();
+        //  Debug.Log("playting" + sound.isPlaying);
 
-    //   sound.Play();
-     //   Debug.Log("playting" + sound.isPlaying);
+        //   sound.Play();
+        //   Debug.Log("playting" + sound.isPlaying);
 
 
         mainbutton.DeleteSquares();
