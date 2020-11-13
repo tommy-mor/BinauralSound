@@ -94,6 +94,11 @@ public class Cylinder1 : UdonSharpBehaviour
     }
 
     private int index; // the index we are in the parent array
+    public int getIndex()
+    {
+        return this.index;
+    }
+
     public void SetSpecial(int idx)
     {
         this.index = idx;
@@ -158,13 +163,16 @@ public class Cylinder1 : UdonSharpBehaviour
             // we are special
 
             Debug.Log("collided with special, destroying other");
-            Destroy(col.gameObject);
+            this.homeCube.GetComponent<spawnCube>().deleteSquare(col.gameObject.GetComponent<Cylinder1>().getIndex());
+            //Destroy(col.gameObject);
+
         }
         else
         {
             Debug.Log("collided with other, destroying me");
+
             this.homeCube.GetComponent<spawnCube>().deleteSquare(this.index);
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 

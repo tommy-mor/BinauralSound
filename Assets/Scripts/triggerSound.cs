@@ -17,7 +17,5 @@ public class triggerSound : UdonSharpBehaviour
         //   sound.Play();
         //   Debug.Log("playting" + sound.isPlaying);
 
-
-        mainbutton.DeleteSquares();
     }
 }
