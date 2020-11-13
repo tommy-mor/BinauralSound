@@ -163,16 +163,20 @@ public class Cylinder1 : UdonSharpBehaviour
             // we are special
 
             Debug.Log("collided with special, destroying other");
-            this.homeCube.GetComponent<spawnCube>().deleteSquare(col.gameObject.GetComponent<Cylinder1>().getIndex());
+            //this.homeCube.GetComponent<spawnCube>().deleteSquare(col.gameObject.GetComponent<Cylinder1>().getIndex());
             //Destroy(col.gameObject);
 
         }
         else
         {
-            Debug.Log("collided with other, destroying me");
+            if(gameObject.activeSelf)
+            {
+                Debug.Log("collided with other, destroying me");
+                this.homeCube.GetComponent<spawnCube>().deleteSquare(this.index); // mark as deleted
+                gameObject.SetActive(false);
+                //Destroy(gameObject);
 
-            this.homeCube.GetComponent<spawnCube>().deleteSquare(this.index);
-            //Destroy(gameObject);
+            }
         }
     }
 

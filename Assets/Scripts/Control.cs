@@ -12,6 +12,8 @@ public class Control : UdonSharpBehaviour
 
     private int numberOfStimuli = 10;
 
+    private bool ready = true;
+
     void Start()
     {
         
@@ -25,10 +27,14 @@ public class Control : UdonSharpBehaviour
     public void Toggle()
     {
         Debug.Log("number of stimuli: " + this.numberOfStimuli);
-        if (currentTrial == null || !currentTrial.activeSelf) // after a trial has reached its last stage, it becomes incactive
+        if (this.ready) // after a trial has reached its last stage, it becomes incactive
         {
+            this.ready = false;
             numberOfStimuli = numberOfStimuli * 2;
             currentTrial = VRCInstantiate(trial);
+
+            //Debug.Log("number of stimuli");
+            currentTrial.GetComponent<spawnCube>().setTrialSize(numberOfStimuli);
             // TODO make setter that sets desirable properties about the trial, (its number of stimuli, timing settings, etc)
             //currentTrial.GetComponent<spawnCube>().setSettings(100, .4);
             currentTrial.transform.position = trial.transform.position;
@@ -40,5 +46,11 @@ public class Control : UdonSharpBehaviour
             // do nothing, because a non-null trial means that there is a trial happening
         }
         //trial.SetActive(true);
+    }
+
+    // our child is signalling that we are done
+    public void signalDone()
+    {
+        this.ready = true;
     }
 }

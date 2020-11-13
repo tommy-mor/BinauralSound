@@ -11,13 +11,16 @@ public class spawnCube : UdonSharpBehaviour
     public GameObject spawnItem;
     public GameObject audioObject;
     public GameObject text;
+    public GameObject controller;
 
 
     float sphereRadius = 10;
     private int trialSize = 100; 
     private float timer = 0.0f;
 
-    private GameObject[] created;
+    private GameObject[] created = new GameObject[1000];
+    private int[] createdAlive = new int[1000];
+
 
 
     // states
@@ -48,7 +51,13 @@ public class spawnCube : UdonSharpBehaviour
 
     public void Start()
     {
-        this.created = new GameObject[2000];
+        Debug.Log("starting");
+
+        for(int i = 0; i < 1000; i++)
+        {
+            this.createdAlive[i] = 0;
+            this.created[i] = null;
+        }
         m("state: 0");
         Random.InitState(1234);
 
@@ -57,19 +66,27 @@ public class spawnCube : UdonSharpBehaviour
 
     }
 
+    public void setTrialSize(int trialSize)
+    {
+        this.trialSize = trialSize;
+    }
+
     private int frameCounter = 0;
     public void Update()
     {
+        if(this.createdAlive == null) { Debug.Log("CREATEDALIVE IS DEAD"); }
         if (state == 0) // we are still filling up the N nodes
         {
             if (countNotNull() < trialSize) // if statement, not while loop, cause while loop is the update cycle/game clock
             {
+                Debug.Log("count not null: " + countNotNull());
                 // could get rid couldNotNull() looping through twice, but I don't care enough
                 for (int i = 0; i < trialSize; i++)
                 {
-                    if (created[i] == null)
+                    if (this.createdAlive[i] == 0)
                     {
-                        created[i] = createPin(i);
+                        this.created[i] = createPin(i);
+                        break; // try only doing one per frame?
                     }
                 }
                 // let a frame run
@@ -77,7 +94,7 @@ public class spawnCube : UdonSharpBehaviour
             else
             {
                 // make sure the finished state is stable?
-                this.frameCounter++;
+                this.frameCounter++; 
                 if (this.frameCounter > 20)
                 {
                     // we have enough nodes, transition to state
@@ -164,7 +181,7 @@ public class spawnCube : UdonSharpBehaviour
         this.timer = 0.0f;
         this.state = 3;
 
-        // TODO make stimuli visible
+        // TODO make stimuli visible, probably want to reset their timers too so that they blink in sync
 
         m("you are now testing! good luck"); // this will get overwritten by the timer immediately
     }
@@ -181,7 +198,10 @@ public class spawnCube : UdonSharpBehaviour
 
     public void EnteringState5()
     {
+        controller.GetComponent<Control>().signalDone();
+        m("wait for next trial");
         gameObject.SetActive(false);
+        DestroyImmediate(gameObject);
     }
 
 
@@ -208,6 +228,7 @@ public class spawnCube : UdonSharpBehaviour
                 newObject.GetComponent<Cylinder1>().SetUnSpecial(count);
 
             }
+            this.createdAlive[count] = 1;
             return newObject;
         }
         else
@@ -219,12 +240,21 @@ public class spawnCube : UdonSharpBehaviour
 
     public void deleteSquare(int idx)
     {
-        if(this.created[idx] != null)
-        {
-            Destroy(this.created[idx]);
-            this.created[idx] = null;
-        }
+        //   //this.created.GetValue()
+        //   if(this.created[idx] != null)
+        //   {
+        //       Destroy(this.created[idx]);
+        //       //this.created[idx] = null;
+        //   }
+        //this.created[idx] = null;
+        Debug.Log("idx to delete: " + idx);
+        Debug.Log(createdAlive);
+        Debug.Log(createdAlive.Length);
 
+        Debug.Log(createdAlive[idx]);
+
+
+        createdAlive[idx] = 0;
     }
 
     public override void Interact()
@@ -285,7 +315,7 @@ public class spawnCube : UdonSharpBehaviour
                     Debug.Log(created[i]);
 
                     Destroy(created[i]);
-                    created[i] = null;
+                    //created[i] = null;
                 }
             }
         }
@@ -295,12 +325,12 @@ public class spawnCube : UdonSharpBehaviour
 
     private int countNotNull()
     {
-        Debug.Log("logging the array");
-        Debug.Log(this.created);
+        //Debug.Log("logging the array");
+        //Debug.Log(this.created);
         int count = 0;
-        for (int i = 0; i < this.created.Length - 1; i++)
+        for (int i = 0; i < this.createdAlive.Length - 1; i++)
         {
-            if (this.created[i] != null)
+            if (this.createdAlive[i] == 1)
             {
                 count++;
             }
