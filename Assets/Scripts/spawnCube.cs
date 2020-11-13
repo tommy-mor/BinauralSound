@@ -14,7 +14,7 @@ public class spawnCube : UdonSharpBehaviour
 
 
     float sphereRadius = 10;
-    private int trialSize = 100;
+    private int trialSize = 100; 
     private float timer = 0.0f;
 
     private GameObject[] created;
@@ -32,14 +32,15 @@ public class spawnCube : UdonSharpBehaviour
 
     // todo
     // do a L/R easy test to start
-    //x make them change colors/change orientations
+    // x make them change colors/change orientations
     // make the participant/runner separate
     // think of way to make them press button
     // x height limit of 75% radius
     // x move behavior of sound one into normal class
     // x handle collisions?
     // create object above us that can make more trials and etc, we are controlled by him.
-    // refactor, add invisibility
+    // x refactor,
+    // add invisibility
 
     // x solution to sync problem: use synced variable random seed, so it generates all of the same things. send out network events. (good) will this work?
     // x OR hvae a set of nodes, just move them around using shared variables. (bad)
@@ -99,8 +100,10 @@ public class spawnCube : UdonSharpBehaviour
             this.timer += Time.deltaTime;
             m("seconds since entered state 2: " + this.timer);
             // countdown timer random seconds until transition to next stage (actual testing stage)
-
-
+            if(this.timer > 5.0)
+            {
+                transitionTo(3);
+            }
         }
         else if (state == 3)
         {
@@ -141,6 +144,10 @@ public class spawnCube : UdonSharpBehaviour
         {
             SendCustomNetworkEvent(NetworkEventTarget.All, "EnteringState4");
         }
+        else if (newstate == 5)
+        {
+            SendCustomNetworkEvent(NetworkEventTarget.All, "EnteringState5");
+        }
     }
 
 
@@ -170,6 +177,11 @@ public class spawnCube : UdonSharpBehaviour
         m("you are now done with this trial! your time was " + this.timer);
 
         deleteSquares();
+    }
+
+    public void EnteringState5()
+    {
+        gameObject.SetActive(false);
     }
 
 
@@ -207,8 +219,12 @@ public class spawnCube : UdonSharpBehaviour
 
     public void deleteSquare(int idx)
     {
-        Destroy(this.created[idx]);
-        this.created[idx] = null;
+        if(this.created[idx] != null)
+        {
+            Destroy(this.created[idx]);
+            this.created[idx] = null;
+        }
+
     }
 
     public override void Interact()
@@ -230,6 +246,12 @@ public class spawnCube : UdonSharpBehaviour
         {
             // if we press the button while actually performing the task, that means that we are done with the task
             transitionTo(4);
+
+        }
+        // transitioning to five is actually just deleting ourself, so that we may be born anew
+        else if (state == 4)
+        {
+            transitionTo(5);
 
         }
     }
