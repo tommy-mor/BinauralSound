@@ -36,13 +36,13 @@ public class Cube : UdonSharpBehaviour
 
         //if (col.gameObject.tag == "Pin")
         //{ //if colliding object is of type 'Pin'
-            Destroy(gameObject); //destroy this game object.
-                                 //Debug.Log("Object destroyed!");
-       // }
-      //  else if (col.gameObject.tag == "PipPopPin")
-      //  { // makes sure PipPopPin destroys this object. could be an || statement, but meh. I like spaghetti.
-      //      Destroy(this.gameObject);
-       //     Debug.Log("Pip-Pop Pin destroyed other pin!");
-      //  }
+        Destroy(gameObject); //destroy this game object.
+                             //Debug.Log("Object destroyed!");
+                             // }
+                             //  else if (col.gameObject.tag == "PipPopPin")
+                             //  { // makes sure PipPopPin destroys this object. could be an || statement, but meh. I like spaghetti.
+                             //      Destroy(this.gameObject);
+                             //     Debug.Log("Pip-Pop Pin destroyed other pin!");
+                             //  }
     }
 }

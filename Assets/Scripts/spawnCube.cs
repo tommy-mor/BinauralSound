@@ -9,13 +9,13 @@ using VRC.Udon.Common.Interfaces;
 public class spawnCube : UdonSharpBehaviour
 {
     public GameObject spawnItem;
-    public GameObject audioObject;
+
     public GameObject text;
     public GameObject controller;
 
 
     float sphereRadius = 10;
-    private int trialSize = 100; 
+    private int trialSize = 100;
     private float timer = 0.0f;
 
     private GameObject[] created = new GameObject[1000];
@@ -53,7 +53,7 @@ public class spawnCube : UdonSharpBehaviour
     {
         Debug.Log("starting");
 
-        for(int i = 0; i < 1000; i++)
+        for (int i = 0; i < 1000; i++)
         {
             this.createdAlive[i] = 0;
             this.created[i] = null;
@@ -74,7 +74,7 @@ public class spawnCube : UdonSharpBehaviour
     private int frameCounter = 0;
     public void Update()
     {
-        if(this.createdAlive == null) { Debug.Log("CREATEDALIVE IS DEAD"); }
+        if (this.createdAlive == null) { Debug.Log("CREATEDALIVE IS DEAD"); }
         if (state == 0) // we are still filling up the N nodes
         {
             if (countNotNull() < trialSize) // if statement, not while loop, cause while loop is the update cycle/game clock
@@ -94,7 +94,7 @@ public class spawnCube : UdonSharpBehaviour
             else
             {
                 // make sure the finished state is stable?
-                this.frameCounter++; 
+                this.frameCounter++;
                 if (this.frameCounter > 20)
                 {
                     // we have enough nodes, transition to state
@@ -117,7 +117,7 @@ public class spawnCube : UdonSharpBehaviour
             this.timer += Time.deltaTime;
             m("seconds since entered state 2: " + this.timer);
             // countdown timer random seconds until transition to next stage (actual testing stage)
-            if(this.timer > 5.0)
+            if (this.timer > 5.0)
             {
                 transitionTo(3);
             }

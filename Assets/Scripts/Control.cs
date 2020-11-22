@@ -16,11 +16,12 @@ public class Control : UdonSharpBehaviour
 
     void Start()
     {
-        
+
     }
 
     public override void Interact()
     {
+        Debug.Log("interacted with cube");
         SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, "Toggle");
     }
 

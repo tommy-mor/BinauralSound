@@ -7,7 +7,7 @@ using VRC.Udon;
 public class triggerSound : UdonSharpBehaviour
 {
     public GameObject audioObject;
-    public spawnCube mainbutton;
+    // public spawnCube mainbutton;
 
     public override void Interact()
     {
